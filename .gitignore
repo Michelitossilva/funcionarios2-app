@@ -1,0 +1,25 @@
+(
+echo # Ficheiros e pastas do Maven
+echo target/
+echo !.mvn/wrapper/maven-wrapper.jar
+echo.
+echo # Ficheiros de Log
+echo *.log
+echo.
+echo ### IntelliJ IDEA ###
+echo .idea/
+echo *.iml
+echo *.iws
+echo.
+echo ### Eclipse ###
+echo .classpath
+echo .project
+echo .settings/
+echo.
+echo ### VS Code ###
+echo .vscode/
+echo.
+echo ### Ficheiros do Sistema Operativo ###
+echo .DS_Store
+echo Thumbs.db
+) > .gitignore

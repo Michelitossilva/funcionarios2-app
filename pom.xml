@@ -1,0 +1,101 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>root</groupId>
+    <artifactId>project</artifactId>
+    <version>1.0</version>
+    <packaging>pom</packaging>
+    <name>project</name>
+
+    <!-- MELHORIA: Propriedades para centralizar versões e configurações -->
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <!-- Versão da API Jakarta EE definida em um único lugar -->
+        <jakartaee.api.version>10.0.0</jakartaee.api.version>
+    </properties>
+
+    <modules>
+        <module>projects</module>
+        <module>primary-source</module>
+        <module>servlets</module>
+        <module>ejbs</module>
+        <module>ear</module>
+    </modules>
+
+    <!-- MELHORIA: Gerenciamento centralizado das dependências para todos os módulos filhos -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- CORREÇÃO: API Jakarta EE 10 gerenciada para todos os módulos -->
+            <dependency>
+                <groupId>jakarta.platform</groupId>
+                <artifactId>jakarta.jakartaee-api</artifactId>
+                <version>${jakartaee.api.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- Gerenciamento das dependências internas do seu projeto (mantido) -->
+            <dependency>
+                <groupId>root.project.projects</groupId>
+                <artifactId>logging</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>root.project</groupId>
+                <artifactId>primary-source</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!-- CORREÇÃO: O artifactId deve ser 'servlets' para corresponder ao módulo -->
+            <dependency>
+                <groupId>root.project.servlets</groupId>
+                <artifactId>servlets</artifactId>
+                <version>${project.version}</version>
+                <type>war</type>
+            </dependency>
+            <dependency>
+                <groupId>root.project</groupId>
+                <artifactId>ejbs</artifactId>
+                <version>${project.version}</version>
+                <type>ejb</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <!-- MELHORIA: Gerenciamento centralizado dos plugins para resolver os avisos -->
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.13.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-ejb-plugin</artifactId>
+                    <version>3.2.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>3.4.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-ear-plugin</artifactId>
+                    <version>3.3.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.12.1</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+</project>

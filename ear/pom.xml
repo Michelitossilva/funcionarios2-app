@@ -1,0 +1,68 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>root.project</groupId>
+    <artifactId>ear</artifactId>
+    <packaging>ear</packaging>
+    <version>1.0</version>
+    <name>ear assembly</name>
+
+    <parent>
+        <groupId>root</groupId>
+        <artifactId>project</artifactId>
+        <version>1.0</version>
+    </parent>
+
+    <dependencies>
+        <!-- Módulo EJB a ser empacotado no EAR -->
+        <dependency>
+            <groupId>root.project</groupId>
+            <artifactId>ejbs</artifactId>
+            <type>ejb</type>
+            <!-- A versão é herdada do pom.xml pai -->
+        </dependency>
+
+        <!-- CORREÇÃO: O artifactId foi corrigido de 'servlet' para 'servlets' -->
+        <dependency>
+            <groupId>root.project.servlets</groupId>
+            <artifactId>servlets</artifactId>
+            <type>war</type>
+        </dependency>
+
+        <!-- Módulos JAR a serem colocados na pasta /lib do EAR -->
+        <dependency>
+            <groupId>root.project</groupId>
+            <artifactId>primary-source</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>root.project.projects</groupId>
+            <artifactId>logging</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- MELHORIA: Versão do plugin definida e configuração para Jakarta EE 10 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-ear-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <!-- Define a versão da especificação para Jakarta EE 10 -->
+                    <version>10</version>
+                    <!-- Garante que os JARs de dependência sejam incluídos na pasta /lib do EAR -->
+                    <defaultLibBundleDir>lib</defaultLibBundleDir>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
