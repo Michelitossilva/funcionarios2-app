@@ -5,22 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="38647c6e-a558-416b-9eb0-cc85057e6a64" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ear/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ejbs/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ejbs/src/main/java/com/exemplo/funcionarios/model/Funcionario.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ejbs/src/main/java/com/exemplo/funcionarios/service/FuncionarioService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ejbs/src/main/resources/META-INF/persistence.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/primary-source/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/projects/logging/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/projects/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/servlets/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/servlets/src/main/java/com/exemplo/funcionarios/web/FuncionarioBean.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/servlets/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/servlets/src/main/webapp/index.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,6 +51,9 @@
     &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
   }
 }</component>
+  <component name="QodanaGithubNotificationPromoProjectDismissalState">
+    <option name="dismissed" value="true" />
+  </component>
   <component name="RecentsManager">
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="com.exemplo" />
