@@ -1,4 +1,6 @@
 # Gestão de Funcionários com Spring Boot
+![Build](https://github.com/michelito/funcionarios2-app/actions/workflows/build.yml/badge.svg)
+
 
 <!-- Badge do GitHub Actions irá aparecer aqui -->
 
