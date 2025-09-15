@@ -1,94 +1,52 @@
-Projeto de Gestão de Funcionários (Aplicação Java EE)
+# Gestão de Funcionários com Spring Boot
 
-[![Build do Projeto Java EE](https://github.com/Michelitossilva/funcionarios-app/actions/workflows/build.yml/badge.svg)](https://github.com/Michelitossilva/funcionarios-app/actions/workflows/build.yml)
+<!-- Badge do GitHub Actions irá aparecer aqui -->
 
-Visão Geral
-Este projeto é uma aplicação web completa para a gestão de funcionários, desenvolvida de ponta a ponta utilizando tecnologias modernas do ecossistema Jakarta EE. O objetivo principal é demonstrar a construção de uma aplicação empresarial robusta, desde a configuração da infraestrutura (servidor de aplicação e banco de dados) até o desenvolvimento de uma interface web funcional.
+## 🚀 Sobre o Projeto
 
-A aplicação implementa todas as operações CRUD (Create, Read, Update, Delete) para a entidade "Funcionário", servindo como um exemplo prático e um excelente ponto de partida para projetos Java EE mais complexos.
+Este projeto é uma aplicação web completa para a gestão de funcionários, desenvolvida com o moderno ecossistema **Spring Boot**. A aplicação representa a migração de uma arquitetura tradicional Jakarta EE (com WildFly) para uma abordagem mais leve, autónoma e pronta para a nuvem.
 
-Tecnologias Utilizadas
-A pilha de tecnologias escolhida para este projeto reflete um ambiente de desenvolvimento empresarial moderno e alinhado com as melhores práticas do mercado.
+O objetivo é demonstrar a construção de uma aplicação robusta com Spring Boot, implementando todas as operações CRUD (Create, Read, Update, Delete) e seguindo as melhores práticas de desenvolvimento, como Injeção de Dependências e a separação de camadas.
 
-Linguagem: Java 17
+## 🛠️ Tecnologias Utilizadas
 
-Plataforma: Jakarta EE 10
+* **Linguagem:** Java 17
+* **Framework Principal:** Spring Boot 3
+* **Acesso a Dados:** Spring Data JPA (com Hibernate)
+* **Camada Web:** Spring MVC
+* **Motor de Templates:** Thymeleaf
+* **Banco de Dados:** PostgreSQL 17
+* **Ferramenta de Build:** Apache Maven
+* **Empacotamento:** Docker
 
-Servidor de Aplicação: WildFly 37
+## 🏛️ Arquitetura
 
-Banco de Dados: PostgreSQL 17
+A aplicação segue uma arquitetura de camadas clássica e bem definida:
 
-Ferramenta de Build: Apache Maven
+* **`@Controller` (Camada Web):** Recebe as requisições HTTP do navegador e interage com a camada de serviço.
+* **`@Service` (Camada de Serviço):** Contém a lógica de negócio da aplicação.
+* **`@Repository` (Camada de Dados):** Abstrai o acesso ao banco de dados, utilizando o poder do Spring Data JPA.
+* **`@Entity` (Modelo):** Representa os dados da aplicação e o seu mapeamento para as tabelas do banco de dados.
 
-Frameworks e APIs Principais
-Jakarta Server Faces (JSF) 4.0: Para a construção da interface do utilizador (frontend).
+## ⚙️ Como Executar o Projeto
 
-Jakarta Persistence (JPA) 3.1: Para o mapeamento objeto-relacional (ORM) e a persistência de dados, utilizando o Hibernate como provedor.
+### Pré-requisitos
+* JDK 17
+* Apache Maven 3.6+
+* PostgreSQL 17 a correr localmente.
 
-Enterprise JavaBeans (EJB) 4.0: Para a implementação da lógica de negócio de forma transacional e segura.
+### 1. Configuração do Banco de Dados
+1.  Crie um banco de dados no PostgreSQL chamado `funcionarios`.
+2.  Abra o ficheiro `src/main/resources/application.properties` e atualize as propriedades `spring.datasource.username` e `spring.datasource.password` com as suas credenciais.
 
-Contexts and Dependency Injection (CDI) 4.0: Para a gestão do ciclo de vida dos beans e a injeção de dependências.
+### 2. Executar a Aplicação
+1.  Navegue até à pasta raiz do projeto.
+2.  Execute o seguinte comando Maven para iniciar a aplicação:
+    ```bash
+    mvn spring-boot:run
+    ```
+3.  Alternativamente, pode executar o método `main` da classe `FuncionariosApplication.java` diretamente na sua IDE.
 
-Arquitetura do Projeto
-O projeto foi estruturado como um projeto Maven multi-módulo, uma abordagem que promove a organização e a reutilização de código.
-
-pom.xml (Pai): O ficheiro principal que gere as dependências e os plugins para todos os módulos.
-
-ejbs: Módulo do tipo EJB-JAR, contém as entidades JPA (Funcionario.java) e os serviços de negócio (FuncionarioService.java).
-
-servlets: Módulo do tipo WAR, contém a camada de apresentação, incluindo as páginas JSF (index.xhtml), os managed beans (FuncionarioBean.java) e os ficheiros de configuração web (web.xml).
-
-ear: Módulo do tipo EAR, responsável por empacotar todos os outros módulos (.jar e .war) num único ficheiro final que é implantado no servidor WildFly.
-
-logging / primary-source: Módulos utilitários do tipo JAR.
-
-Como Executar o Projeto
-Para configurar e executar este projeto no seu ambiente local, siga os passos abaixo.
-
-Pré-requisitos
-JDK 17
-
-Apache Maven 3.6+
-
-PostgreSQL 17
-
-WildFly 37
-
-1. Configuração do Banco de Dados
-   Aceda ao seu servidor PostgreSQL via psql ou pgAdmin.
-
-Crie um novo banco de dados com o nome funcionarios:
-
-CREATE DATABASE funcionarios;
-
-2. Configuração do WildFly
-   Instale o Driver JDBC: Crie o módulo do driver do PostgreSQL na pasta modules do WildFly, conforme a documentação oficial.
-
-Crie o Datasource: No console de administração do WildFly, crie um novo datasource com as seguintes especificações:
-
-Nome: PostgresDS
-
-Nome JNDI: java:/PostgresDS
-
-URL de Conexão: jdbc:postgresql://localhost:5432/funcionarios
-
-Utilizador/Senha: As suas credenciais do PostgreSQL.
-
-3. Build e Deploy
-   Clone este repositório para a sua máquina local.
-
-Navegue até à pasta raiz do projeto e execute o comando Maven para compilar e empacotar a aplicação:
-
-mvn clean install
-
-Após o build bem-sucedido, localize o ficheiro final na pasta ear/target/ear-1.0.ear.
-
-Copie o ficheiro ear-1.0.ear para a pasta de deployments do seu servidor WildFly:
-[WILDFLY_HOME]/standalone/deployments/
-
-O WildFly fará o "hot deploy" da aplicação.
-
-4. Aceder à Aplicação
-   Abra o seu navegador e aceda ao seguinte URL:
-
-http://localhost:8080/servlets/
+### 3. Aceder à Aplicação
+Abra o seu navegador e aceda ao seguinte URL:
+**http://localhost:8080**

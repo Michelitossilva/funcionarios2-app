@@ -1,25 +1,33 @@
-(
-echo # Ficheiros e pastas do Maven
-echo target/
-echo !.mvn/wrapper/maven-wrapper.jar
-echo.
-echo # Ficheiros de Log
-echo *.log
-echo.
-echo ### IntelliJ IDEA ###
-echo .idea/
-echo *.iml
-echo *.iws
-echo.
-echo ### Eclipse ###
-echo .classpath
-echo .project
-echo .settings/
-echo.
-echo ### VS Code ###
-echo .vscode/
-echo.
-echo ### Ficheiros do Sistema Operativo ###
-echo .DS_Store
-echo Thumbs.db
-) > .gitignore
+# Ficheiros de Log
+*.log
+logs/
+
+# Ficheiros de Compilação do Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+
+# Ficheiros do IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+
+# Ficheiros do Sistema Operativo
+.DS_Store
+Thumbs.db
+
+# Ficheiros de Build de Outras Ferramentas
+.gradle
+build/
+.settings/
+.classpath
+.project
+
+# Ficheiros de Execução do Spring Boot
+*.jar
+*.war

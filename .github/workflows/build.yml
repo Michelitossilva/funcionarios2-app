@@ -1,5 +1,5 @@
-# Nome do nosso workflow de automação
-name: Build do Projeto Java EE
+# Nome do nosso workflow de automação para o projeto Spring Boot
+name: Build do Projeto Spring Boot
 
 # Define quando este workflow deve ser executado
 on:
@@ -17,7 +17,7 @@ jobs:
 
     steps:
       # Passo 1: O robô "clona" o seu repositório para a máquina virtual
-      - name: Checkout do código
+      - name: Checkout do codigo
         uses: actions/checkout@v4
 
       # Passo 2: O robô instala e configura o Java 17
@@ -28,8 +28,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      # Passo 3: O robô executa o comando de build do Maven
-      # Se este comando falhar, o workflow inteiro falha
+      # Passo 3: O robô executa o comando de build do Maven para o projeto Spring Boot
+      # O comando 'package' é suficiente para verificar a compilação e gerar o .jar
       - name: Compilar com o Maven
-        run: mvn -B clean install
-
+        run: mvn -B package --file pom.xml

@@ -9,6 +9,11 @@
     </option>
     <option name="ignoredFiles">
       <set>
+        <option value="$PROJECT_DIR$/ear/pom.xml" />
+        <option value="$PROJECT_DIR$/ejbs/pom.xml" />
+        <option value="$PROJECT_DIR$/primary-source/pom.xml" />
+        <option value="$PROJECT_DIR$/projects/pom.xml" />
+        <option value="$PROJECT_DIR$/servlets/pom.xml" />
         <option value="$PROJECT_DIR$/servlets/servlet/pom.xml" />
       </set>
     </option>

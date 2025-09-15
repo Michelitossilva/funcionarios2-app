@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Gestão de Funcionários</title>
+    <!-- Um pouco de estilo para deixar a página mais agradável -->
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f9f9f9; }
+        .container { max-width: 900px; margin: auto; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .form-grid { display: grid; grid-template-columns: 100px 1fr; gap: 10px; margin-bottom: 20px; align-items: center; }
+        .table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .table th, .table td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        .table th { background-color: #f2f2f2; }
+        .btn { padding: 10px 15px; color: white; border: none; cursor: pointer; border-radius: 4px; text-decoration: none; display: inline-block; margin-right: 5px; }
+        .btn-save { background-color: #007bff; }
+        .btn-save:hover { background-color: #0056b3; }
+        .btn-edit { background-color: #28a745; }
+        .btn-edit:hover { background-color: #218838; }
+        .btn-delete { background-color: #dc3545; }
+        .btn-delete:hover { background-color: #c82333; }
+        h1, h2 { color: #333; }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <h1>Gestão de Funcionários</h1>
+
+    <!-- CORREÇÃO CRÍTICA: Adicionado o atributo th:object para ligar o formulário ao objeto "funcionario" -->
+    <form action="#" th:action="@{/salvar}" th:object="${funcionario}" method="post">
+
+        <!-- Campo oculto para guardar o ID durante a edição -->
+        <input type="hidden" th:field="*{id}"/>
+
+        <div class="form-grid">
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" th:field="*{nome}" placeholder="Nome completo"/>
+
+            <label for="cargo">Cargo:</label>
+            <input type="text" id="cargo" th:field="*{cargo}" placeholder="Cargo do funcionário"/>
+
+            <label for="salario">Salário:</label>
+            <input type="text" id="salario" th:field="*{salario}" placeholder="Ex: 1500.50"/>
+
+            <span/> <!-- Célula vazia para alinhar o botão -->
+            <button type="submit" class="btn btn-save">Salvar</button>
+        </div>
+    </form>
+
+    <hr/>
+
+    <h2>Funcionários Cadastrados</h2>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Cargo</th>
+            <th>Salário</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Loop para exibir cada funcionário da lista -->
+        <tr th:each="func : ${listaFuncionarios}">
+            <td th:text="${func.id}">1</td>
+            <td th:text="${func.nome}">Nome do Funcionário</td>
+            <td th:text="${func.cargo}">Cargo</td>
+            <!-- Formata o salário como moeda BRL -->
+            <td th:text="${#numbers.formatCurrency(func.salario)}">R$ 1.500,00</td>
+            <td>
+                <a th:href="@{/editar/{id}(id=${func.id})}" class="btn btn-edit">Editar</a>
+                <a th:href="@{/remover/{id}(id=${func.id})}" class="btn btn-delete"
+                   onclick="return confirm('Tem certeza que deseja remover este funcionário?');">Remover</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
+
