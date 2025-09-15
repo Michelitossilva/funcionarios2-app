@@ -1,4 +1,7 @@
 Projeto de Gestão de Funcionários (Aplicação Java EE)
+
+[![Build do Projeto Java EE](https://github.com/Michelitossilva/funcionarios-app/actions/workflows/build.yml/badge.svg)](https://github.com/Michelitossilva/funcionarios-app/actions/workflows/build.yml)
+
 Visão Geral
 Este projeto é uma aplicação web completa para a gestão de funcionários, desenvolvida de ponta a ponta utilizando tecnologias modernas do ecossistema Jakarta EE. O objetivo principal é demonstrar a construção de uma aplicação empresarial robusta, desde a configuração da infraestrutura (servidor de aplicação e banco de dados) até o desenvolvimento de uma interface web funcional.
 

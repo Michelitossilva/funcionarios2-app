@@ -51,9 +51,6 @@
     &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
   }
 }</component>
-  <component name="QodanaGithubNotificationPromoProjectDismissalState">
-    <option name="dismissed" value="true" />
-  </component>
   <component name="RecentsManager">
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="com.exemplo" />
