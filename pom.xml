@@ -45,7 +45,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <scope>runtime</scope>
+            <scope>42.6.0</scope>
         </dependency>
 
         <!-- Testes -->
