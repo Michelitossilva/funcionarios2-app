@@ -17,7 +17,7 @@ services:
       - app-network
 
   app:
-    build: .
+    image: amakusashirou/funcionarios:42d3bad
     container_name: spring-app
     restart: always
     depends_on:
