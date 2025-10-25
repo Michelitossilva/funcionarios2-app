@@ -51,8 +51,9 @@ A aplicação segue uma arquitetura de camadas clássica e bem definida:
 
 ### 3. Aceder à Aplicação
 Abra o seu navegador e aceda ao seguinte URL:
+
 **http://localhost:8080**
----
+
 
 # 🧩 Pipeline CI/CD – Funcionários App
 
