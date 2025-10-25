@@ -52,38 +52,84 @@ A aplicação segue uma arquitetura de camadas clássica e bem definida:
 ### 3. Aceder à Aplicação
 Abra o seu navegador e aceda ao seguinte URL:
 **http://localhost:8080**
+---
 
-## 🟢 Pipeline de Build e Testes (GitHub Actions)
+# 🧩 Pipeline CI/CD – Funcionários App
 
-O projeto possui uma **pipeline automatizada** que roda sempre que você faz push na branch principal ou executa manualmente no GitHub.
-
-## 📌 Objetivo da Pipeline
-A pipeline automatiza tarefas importantes para manter o projeto saudável:
-
-1. Compilar o projeto Java com Maven  
-2. Executar testes unitários  
-3. Verificar codificação UTF-8 nos arquivos de configuração
-> Essa automação garante que você não precisa executar tudo manualmente e evita erros básicos.
+Este documento explica como funciona a pipeline de **Integração Contínua (CI)** e **Entrega Contínua (CD)** do projeto **Gestão de Funcionários com Spring Boot**, configurada com **GitHub Actions**.
 
 ---
-## 🛠️ Pré-requisitos
-Antes de configurar a pipeline, você precisa ter:
 
-- Um repositório no **GitHub**  
-- Código do projeto hospedado nesse repositório  
-- Java 17 instalado (para reproduzir localmente)  
-- Maven instalado (para reproduzir localmente)  
+## ⚙️ 1. Pré-requisitos
+
+Antes de configurar a pipeline, você precisa garantir que:
+
+- Possui uma conta no [Docker Hub](https://hub.docker.com);
+- O repositório da aplicação está hospedado no GitHub;
+- Há um repositório separado contendo os manifestos Kubernetes (ex: `funcionarios-k8s`);
 
 ---
-## ⚙️ Configuração da Pipeline no GitHub
 
-1. **Criar a pasta de workflows**
-No seu repositório, crie a pasta: .github/workflows
-2. **Criar o arquivo da pipeline**
-Dentro de `.github/workflows`, crie um arquivo chamado: build.yml
+## 🔑 2. Criar Token no Docker Hub
 
-3. **Adicionar o conteúdo da pipeline**
-Copie e cole o seguinte código YAML no `build.yml`:
+1. Acesse o [Docker Hub](https://hub.docker.com/settings/security);
+2. Vá em **Security > New Access Token**;
+3. Escolha um nome (ex: `github-actions`);
+4. Copie o token gerado — ele será usado apenas uma vez.
+
+---
+
+## 🔐 3. Configurar Secrets no GitHub
+
+No repositório **da aplicação (Spring Boot)**:
+
+1. Vá em **Settings → Secrets and variables → Actions → New repository secret**;
+2. Adicione os seguintes secrets:
+
+| Nome | Descrição |
+|------|------------|
+| `DOCKERHUB_USERNAME` | Seu nome de usuário no Docker Hub |
+| `DOCKERHUB_TOKEN` | Token gerado no Docker Hub |
+| `TOKEN_GITHUB` | Token de acesso pessoal do GitHub com permissão para commit/push no repositório `funcionarios-k8s` |
+
+> 💡 Para gerar o `TOKEN_GITHUB`, acesse [https://github.com/settings/tokens](https://github.com/settings/tokens) → “Personal access tokens (classic)”.
+
+Como as seguintes pemissões:
+
+<img width="863" height="377" alt="image" src="https://github.com/user-attachments/assets/15139949-e226-4d0e-a96f-f27c0430edfb" />
+
+---
+
+## 🧱 4. Estrutura da Pipeline
+
+A pipeline é definida no arquivo `.github/workflows/build.yml` e contém **dois jobs principais**:
+
+### 🏗️ Job 1 — Build
+Responsável por compilar, testar e gerar a imagem Docker.
+
+Etapas principais:
+1. **Checkout do código**
+2. **Configuração do JDK 17**
+3. **Build e Testes com Maven**
+4. **Login no Docker Hub**
+5. **Build e Push da imagem Docker**  
+   A imagem é enviada com duas tags:
+   - `latest`
+   - O hash curto do commit (`SHA`)
+
+### 🚀 Job 2 — Deploy
+Executado automaticamente após o build bem-sucedido.  
+Atualiza o repositório de manifestos Kubernetes com a nova tag da imagem.
+
+Etapas principais:
+1. **Clona o repositório `funcionarios-k8s`**
+2. **Instala o Kustomize**
+3. **Atualiza a imagem no `kustomization.yaml`**
+4. **Faz commit e push com a nova tag**
+
+---
+
+## 📘 Exemplo de Arquivo `build.yml`
 
 ```yaml
 name: Build do Projeto Spring Boot
@@ -91,18 +137,17 @@ name: Build do Projeto Spring Boot
 on:
   push:
     branches: [ "main" ]
-  workflow_dispatch: # permite rodar manualmente
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      image_sha: ${{ steps.generate_tag.outputs.sha }} 
 
     steps:
-      # 1️⃣ Baixa o código do repositório
-      - name: Checkout do código
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      # 2️⃣ Configura Java 17 e Maven
       - name: Configurar JDK 17
         uses: actions/setup-java@v4
         with:
@@ -110,39 +155,63 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      # 3️⃣ Verifica codificação UTF-8
-      - name: Verificar codificação dos arquivos
+      - name: Compilar e testar
+        run: mvn -B clean package test
+
+      - name: Generate tag
+        id: generate_tag
         run: |
-          file src/main/resources/application.properties || echo "Arquivo não encontrado"
-          iconv -f UTF-8 -t UTF-8 src/main/resources/application.properties > /dev/null || echo "Codificação inválida"
+          SHA=$(echo $GITHUB_SHA | head -c7)
+          echo "sha=$SHA" >> $GITHUB_OUTPUT
 
-      # 4️⃣ Compila o projeto
-      - name: Compilar com Maven
-        run: mvn -B clean package --file pom.xml
+      - name: Login no Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      
+      - name: Build e Push da Imagem
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: |
+            amakusashirou/funcionarios:${{ steps.generate_tag.outputs.sha }}
+            amakusashirou/funcionarios:latest
 
-      # 5️⃣ Executa os testes
-      - name: Executar testes
-        run: mvn test
+  deploy:
+     name: Deploy
+     runs-on: ubuntu-latest
+     needs: build
+
+     steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: LuisCarlosJp/funcionarios-k8s
+          token: ${{ secrets.TOKEN_GITHUB }}
+
+      - uses: imranismail/setup-kustomize@v2
+
+      - name: Atualizar imagem
+        run: |
+          cd kubernetes
+          kustomize edit set image imagem=amakusashirou/funcionarios:${{ needs.build.outputs.image_sha }}
+
+      - name: Commit e Push
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "Deploy Action"
+          git add .
+          git commit -m "Atualizando imagem para nova tag"
+          git pull --rebase
+          git push
 ```
-**Reproduzir a Pipeline Localmente**
-# Compilar o projeto
-mvn clean package
-
-# Rodar os testes
-mvn test
-
-## 🔗 Ver Pipeline no GitHub
-
-Depois de subir o arquivo `build.yml` no repositório:
-
-1. Acesse **Actions** no seu repositório do GitHub.  
-2. Você verá a pipeline rodando automaticamente a cada push na branch `main`.  
-3. Também é possível rodar manualmente clicando em **Run workflow**.
 
 ---
 
-## 💡 Dicas para Iniciantes
+## ✅ 5. Fluxo Completo
 
-- Sempre teste localmente antes de subir alterações no GitHub.  
-- A pipeline é uma forma de **automatizar tarefas repetitivas**.  
-- Você pode adicionar novas etapas depois, como envio de **relatórios de teste** ou **deploy automático**.
+1. Desenvolvedor faz **push** na branch `main`;
+2. GitHub Actions dispara o **job de build**;
+3. Imagem é construída e enviada ao **Docker Hub**;
+4. O **job de deploy** atualiza o repositório Kubernetes;
+5. O **Argo CD** detecta a mudança e aplica o novo deploy automaticamente.
